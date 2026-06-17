@@ -1,0 +1,27 @@
+name: Deploy python application to EC2 instance
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Deploy via SSH
+        uses: actions/setup-python@v4
+        with:
+          host: 100.55.56.247
+          username: root
+          key: ${{ secrets.EC2_KEY }}
+          script: |
+            cd python-application-deply-github-actions
+            git pull
+            docker compose up -d --build
+
+     
